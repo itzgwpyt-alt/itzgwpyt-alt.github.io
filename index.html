@@ -1643,7 +1643,7 @@ const TRANSFORMATIONS = [
     {id:3,category:'exterior',vehicle:'2013 Toyota Tacoma',service:'Express Detail',desc:'Quick but thorough exterior refresh. Decontaminated, clean, and shining.',beforeImg:'2013-tacoma-before-ext.jpeg',afterImg:'2013-tacoma-after-ext.jpeg'},
     {id:4,category:'interior',vehicle:'2013 Toyota Tacoma',service:'Express Detail',desc:'Work-truck interior deep cleaned. Every surface detailed and protected.',beforeImg:'2013-tacoma-before-int.jpeg',afterImg:'2013-tacoma-after-int.jpeg'},
     {id:5,category:'interior',vehicle:'2008 Honda CR-V',service:'Interior Detail',desc:'Aged interior restored. Stains lifted, surfaces revived, fresh cabin feel.',beforeImg:'old-crv-before-int.PNG',afterImg:'old-crv-after-int.PNG'},
-    {id:6,category:'headlight',vehicle:'2008 Honda CR-V',service:'Headlight Restoration',desc:'Yellowed, hazed lenses restored to crystal-clear. Like-new visibility and safety.',beforeImg:'headlight-before.jpeg',afterImg:'headlight-after.jpeg'},
+    {id:6,category:'headlight',vehicle:'2008 Honda CR-V',service:'Headlight Restoration',desc:'Yellowed, hazed lenses restored to crystal-clear. Like-new visibility and safety.',beforeImg:'headlight-before.jpeg',afterImg:'headlight-after.jpeg',beforePos:'50% 30%'},
 ];
 
 /* ═══════════════════════════════════════════════
@@ -1728,7 +1728,7 @@ let activeFilter='all';
 function renderGallery(filter=activeFilter){
     activeFilter=filter||'all';
     const items=filter==='all'?TRANSFORMATIONS:TRANSFORMATIONS.filter(t=>t.category===filter);
-    transformationsGrid.innerHTML=items.map(t=>{var beforeHTML=t.beforeImg?`<img src="${t.beforeImg}" alt="Before" style="width:100%;height:100%;object-fit:cover;object-position:50% 30%">`:`<div class="ba-placeholder">${t.beforeEmoji}</div>`;var afterHTML=t.afterImg?`<img src="${t.afterImg}" alt="After" style="width:100%;height:100%;object-fit:cover">`:`<div class="ba-placeholder" style="background:linear-gradient(135deg,#0a1a10 0%,#0d2a18 100%);color:var(--champagne)">${t.afterEmoji}</div>`;return`
+    transformationsGrid.innerHTML=items.map(t=>{var bp=t.beforePos||'center center';var beforeHTML=t.beforeImg?`<img src="${t.beforeImg}" alt="Before" style="width:100%;height:100%;object-fit:contain;object-position:${bp}">`:`<div class="ba-placeholder">${t.beforeEmoji}</div>`;var afterHTML=t.afterImg?`<img src="${t.afterImg}" alt="After" style="width:100%;height:100%;object-fit:contain;object-position:center center">`:`<div class="ba-placeholder" style="background:linear-gradient(135deg,#0a1a10 0%,#0d2a18 100%);color:var(--champagne)">${t.afterEmoji}</div>`;return`
         <div>
             <div class="ba-slider" data-ba-id="${t.id}" data-category="${t.category}" tabindex="0" role="slider" aria-label="Before and after: ${t.vehicle} — ${t.service}" aria-valuemin="5" aria-valuemax="95" aria-valuenow="50" style="border-radius:0">
                 ${beforeHTML}
