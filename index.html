@@ -743,8 +743,24 @@
                 <label class="addon-toggle">
                     <input type="checkbox" id="chkStain">
                     <span class="addon-checkmark"></span>
-                    <span class="addon-text"><strong>Deep Stain Removal</strong> <span class="addon-price">+$35</span></span>
+                    <span class="addon-text"><strong>Deep Stain Removal</strong> <span class="addon-price">+$35</span> <span class="addon-badge" id="stainIncludedBadge" style="display:none;animation:none">Included in Premium</span></span>
                     <span class="addon-hint">Coffee, juice, mud, ink — we use hot water extraction to lift set-in stains from upholstery and carpet.</span>
+                </label>
+            </div>
+            <div class="addon-bar addon-interior" id="addonSeatShampoo">
+                <label class="addon-toggle">
+                    <input type="checkbox" id="chkSeatShampoo">
+                    <span class="addon-checkmark"></span>
+                    <span class="addon-text"><strong>Seat Shampoo</strong> <span class="addon-price">+$45</span> <span class="addon-badge" id="seatIncludedBadge" style="display:none;animation:none">Included in Premium</span></span>
+                    <span class="addon-hint">Hot-water extraction shampoo for seats and upholstery — lifts embedded grime and refreshes fabric.</span>
+                </label>
+            </div>
+            <div class="addon-bar addon-interior" id="addonCarpetShampoo">
+                <label class="addon-toggle">
+                    <input type="checkbox" id="chkCarpetShampoo">
+                    <span class="addon-checkmark"></span>
+                    <span class="addon-text"><strong>Carpet Shampoo</strong> <span class="addon-price">+$50</span></span>
+                    <span class="addon-hint">Deep carpet and floor mat shampoo — removes ground-in dirt and restores the pile.</span>
                 </label>
             </div>
             <!-- Exterior Add-Ons -->
@@ -1807,7 +1823,16 @@ if (B.heroVideo) {
         let vidId = B.heroVideo.split('v=')[1]?.split('&')[0] || B.heroVideo.split('/').pop();
         wrap.innerHTML = `<iframe src="https://www.youtube.com/embed/${vidId}?autoplay=1&mute=1&loop=1&playlist=${vidId}&controls=0&rel=0&modestbranding=1&playsinline=1&disablekb=1&iv_load_policy=3" style="border:0" allow="autoplay; fullscreen" title="Hero video" loading="eager"></iframe>`;
     } else {
-        wrap.innerHTML = `<video autoplay muted loop playsinline poster=""><source src="${B.heroVideo}" type="video/mp4"></video>`;
+        wrap.innerHTML = `<video autoplay muted loop playsinline preload="auto"><source src="${B.heroVideo}" type="video/mp4"></video>`;
+        // Force playback — some browsers/settings ignore the autoplay attribute
+        const v = wrap.querySelector('video');
+        if (v) {
+            v.muted = true;
+            const tryPlay = () => { v.play().catch(() => {}); };
+            tryPlay();
+            v.addEventListener('loadeddata', tryPlay);
+            v.addEventListener('canplay', tryPlay);
+        }
     }
 }
 
@@ -1840,11 +1865,13 @@ function resetBookingState(){
     });
     selectedMake='';selectedModel='';selectedVehicleData=null;
     var tt=document.getElementById('trustTabWrap');if(tt)tt.style.display='none';
-    ['chkHeadlight','chkPetHair','chkStain','chkIronClay'].forEach(function(id){
-        var el=document.getElementById(id);if(el)el.checked=false;
+    ['chkHeadlight','chkPetHair','chkStain','chkIronClay','chkSeatShampoo','chkCarpetShampoo'].forEach(function(id){
+        var el=document.getElementById(id);if(el){el.checked=false;el.disabled=false;}
     });
     window._headlightAddon=false;window._petHairAddon=false;
     window._stainAddon=false;window._ironClayAddon=false;
+    window._seatShampooAddon=false;window._carpetShampooAddon=false;
+    window._stainLocked=false;window._seatLocked=false;
     var dc=document.getElementById('discountCode');if(dc)dc.value='';
     window._activeDiscount=0;
     var zf=document.getElementById('zipFeedback');if(zf)zf.textContent='';
@@ -1977,6 +2004,7 @@ document.getElementById('submitBooking').addEventListener('click',()=>{
 function mailtoFallback(pl){const sub=encodeURIComponent(`Booking: ${pl.vehicle} — ${pl.service}`),bd=encodeURIComponent(`Name: ${pl.name}\nEmail: ${pl.email}\nPhone: ${pl.phone}\n\nVehicle: ${pl.vehicle} (${pl.year})\nService: ${pl.service}\nEstimate: $${pl.estimatedPrice}\n\nNotes: ${pl.notes||'None'}`);showSuccess();const a=document.createElement('a');a.href=`mailto:${B.email}?subject=${sub}&body=${bd}`;a.click();}
 function showSuccess(){document.getElementById('panel3').classList.remove('active');document.getElementById('panelSuccess').classList.add('active');document.getElementById('step3').classList.remove('active');document.getElementById('step3').classList.add('done');window.scrollTo({top:document.getElementById('book-page').offsetTop+100,behavior:'smooth'});}
 initBooking();
+</script>
 
 
 <script>
@@ -2266,14 +2294,24 @@ initBooking();
     window._stainPrice = 35;
     window._ironClayAddon = false;
     window._ironClayPrice = 60;
+    window._seatShampooAddon = false;
+    window._seatShampooPrice = 45;
+    window._carpetShampooAddon = false;
+    window._carpetShampooPrice = 50;
+    window._stainLocked = false;
+    window._seatLocked = false;
     var chk = document.getElementById('chkHeadlight');
     var chkPet = document.getElementById('chkPetHair');
     var chkStain = document.getElementById('chkStain');
     var chkIron = document.getElementById('chkIronClay');
+    var chkSeat = document.getElementById('chkSeatShampoo');
+    var chkCarpet = document.getElementById('chkCarpetShampoo');
     var addonBar = document.getElementById('addonHeadlight');
     var addonPet = document.getElementById('addonPetHair');
     var addonStain = document.getElementById('addonStain');
     var addonIron = document.getElementById('addonIronClay');
+    var addonSeat = document.getElementById('addonSeatShampoo');
+    var addonCarpet = document.getElementById('addonCarpetShampoo');
 
     // Calculate headlight price based on vehicle size + age
     function getHeadlightPrice(){
@@ -2317,6 +2355,20 @@ initBooking();
         chkStain.addEventListener('change', function(){
             window._stainAddon = chkStain.checked;
             if (addonStain) addonStain.classList.toggle('has-addon', chkStain.checked);
+            if (typeof updatePriceSummary === 'function') updatePriceSummary();
+        });
+    }
+    if (chkSeat) {
+        chkSeat.addEventListener('change', function(){
+            window._seatShampooAddon = chkSeat.checked;
+            if (addonSeat) addonSeat.classList.toggle('has-addon', chkSeat.checked);
+            if (typeof updatePriceSummary === 'function') updatePriceSummary();
+        });
+    }
+    if (chkCarpet) {
+        chkCarpet.addEventListener('change', function(){
+            window._carpetShampooAddon = chkCarpet.checked;
+            if (addonCarpet) addonCarpet.classList.toggle('has-addon', chkCarpet.checked);
             if (typeof updatePriceSummary === 'function') updatePriceSummary();
         });
     }
@@ -3477,16 +3529,16 @@ initBooking();
   '<p style="color:var(--white-muted);font-size:0.68rem;line-height:1.6;font-weight:400;margin-bottom:6px">Every product is <strong style="color:var(--white)">professional or commercial grade</strong> — the same chemicals used by high-end detail shops.</p>'+
   '<p style="font-size:0.58rem;color:var(--champagne);margin-bottom:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em">★ Professional/Commercial Grade ★</p>'+
   '<h6 style="font-family:var(--font-heading);font-size:0.72rem;margin:10px 0 6px;font-weight:600;color:var(--white)">🚗 Exterior</h6>'+
-  '<ul style="color:var(--white-muted);font-size:0.65rem;line-height:1.7;padding-left:12px;font-weight:400;list-style-type:'✦  '">'+
+  '<ul style="color:var(--white-muted);font-size:0.65rem;line-height:1.7;padding-left:12px;font-weight:400;list-style-type:\'✦  \'">'+
    '<li style="padding-left:2px;margin-bottom:1px"><strong style="color:var(--white)">Prewash:</strong> Koch-Chemie GreenStar <span style="font-size:0.55rem;color:var(--champagne);font-weight:700">PRO</span> (20:1)</li>'+
    '<li style="padding-left:2px;margin-bottom:1px"><strong style="color:var(--white)">Contact Wash:</strong> Chemical Guys Mr. Pink <span style="font-size:0.55rem;color:var(--champagne);font-weight:700">PRO</span> (1:15) with The Rag Company Cyclone mitts</li>'+
    '<li style="padding-left:2px;margin-bottom:1px"><strong style="color:var(--white)">Drying:</strong> The Rag Company Liquid8r <span style="font-size:0.55rem;color:var(--champagne);font-weight:700">PRO</span></li>'+
    '<li style="padding-left:2px;margin-bottom:1px"><strong style="color:var(--white)">Wheels:</strong> Dark Fury <span style="font-size:0.55rem;color:var(--champagne);font-weight:700">PRO</span> (4:1) + Wire Wheel Cleaner (5:1)</li>'+
    '<li style="padding-left:2px;margin-bottom:1px"><strong style="color:var(--white)">Wax:</strong> Koch-Chemie Protector Wax <span style="font-size:0.55rem;color:var(--champagne);font-weight:700">PRO</span></li>'+
-   '<li style="padding-left:2px"><strong style="color:var(--white)">Tire Shine:</strong> Meguiar's Hybrid Ceramic Shine <span style="font-size:0.55rem;color:var(--champagne);font-weight:700">PRO</span></li>'+
+   '<li style="padding-left:2px"><strong style="color:var(--white)">Tire Shine:</strong> Meguiar\'s Hybrid Ceramic Shine <span style="font-size:0.55rem;color:var(--champagne);font-weight:700">PRO</span></li>'+
   '</ul>'+
   '<h6 style="font-family:var(--font-heading);font-size:0.72rem;margin:10px 0 6px;font-weight:600;color:var(--white)">🛋️ Interior</h6>'+
-  '<ul style="color:var(--white-muted);font-size:0.65rem;line-height:1.7;padding-left:12px;font-weight:400;list-style-type:'✦  '">'+
+  '<ul style="color:var(--white-muted);font-size:0.65rem;line-height:1.7;padding-left:12px;font-weight:400;list-style-type:\'✦  \'">'+
    '<li style="padding-left:2px;margin-bottom:1px"><strong style="color:var(--white)">Stain Removal (3-Step):</strong> P&amp;S Terminator → P&amp;S Carpet Bomber → P&amp;S Peroxide Finisher <span style="font-size:0.55rem;color:var(--champagne);font-weight:700">PRO</span></li>'+
    '<li style="padding-left:2px;margin-bottom:1px"><strong style="color:var(--white)">Leather:</strong> Koch-Chemie Leather Star <span style="font-size:0.55rem;color:var(--champagne);font-weight:700">PRO</span></li>'+
    '<li style="padding-left:2px;margin-bottom:1px"><strong style="color:var(--white)">APC:</strong> Koch-Chemie Pol Star <span style="font-size:0.55rem;color:var(--champagne);font-weight:700">PRO</span> (10:1)</li>'+
