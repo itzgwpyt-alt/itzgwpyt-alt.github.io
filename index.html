@@ -8,14 +8,17 @@
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://www.totheninesdetail.com/">
     <link rel="icon" href="transparent-logo.png">
-    <meta property="og:title" content="To the Nines Detail — Wake Forest, NC">
-    <meta property="og:description" content="Premium mobile detailing in Wake Forest, NC. We come to you — book online with instant pricing in 60 seconds.">
+    <meta property="og:title" content="Luxury Mobile Detailing in Wake Forest, NC | To The Nines Detail">
+    <meta property="og:description" content="5-star mobile auto detailing in Wake Forest, NC. We come to your driveway. Hand wash, interior restoration & headlight restoration. Instant pricing — book in 60 seconds. Serving Rolesville, Wakefield & North Raleigh.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://www.totheninesdetail.com/">
-    <meta property="og:image" content="https://www.totheninesdetail.com/transparent-logo.png">
+    <meta property="og:image" content="https://www.totheninesdetail.com/share-cover.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
+    <meta name="twitter:image" content="https://www.totheninesdetail.com/share-cover.png">
     <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Luxury Mobile Detailing in Wake Forest, NC | To The Nines Detail">
+    <meta name="twitter:description" content="5-star mobile auto detailing in Wake Forest, NC. We come to you. Book online with instant pricing in 60 seconds.">
     <title>Mobile Auto Detailing Wake Forest NC | To the Nines Detail | Book Online</title>
 
     <!-- Structured Data: LocalBusiness + AutoDetailing -->
@@ -148,6 +151,7 @@
             0%,100%{transform:translate(0,0) scale(1)}
             25%{transform:translate(2px,-3px) scale(1.03)}
             50%{transform:translate(-3px,1px) scale(0.97)}
+            75%{transform:translate(-1px,-3px) scale(1.02)}
             75%{transform:translate(-1px,-2px) scale(1.02)}
         }
 
@@ -243,6 +247,20 @@
         .skeleton-text.short{width:50%}
         .page-transition{animation:pageIn 0.4s ease both}
         @keyframes pageIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+        /* ═══════════ GALLERY CARD ANIMATIONS ═══════════ */
+        .transformations-grid>div{transition:0.4s cubic-bezier(0.4,0,0.2,1);border-radius:var(--radius-sm);animation:galleryCardIn 0.6s ease both}
+        .transformations-grid>div:hover{transform:translateY(-6px)}
+        .transformations-grid>div:hover .ba-slider{box-shadow:0 0 24px var(--champagne-glow);border-color:var(--champagne)}
+        @keyframes galleryCardIn{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+
+        /* ═══════════ SUCCESS CHECKMARK ═══════════ */
+        .success-checkmark{width:80px;height:80px;margin:0 auto 16px;display:block}
+        .success-checkmark .circle{fill:none;stroke:var(--champagne);stroke-width:3;opacity:0.3}
+        .success-checkmark .circle-anim{fill:none;stroke:var(--champagne);stroke-width:3;stroke-dasharray:226;stroke-dashoffset:226;animation:drawCircle 0.6s 0.2s ease forwards}
+        .success-checkmark .check{fill:none;stroke:var(--champagne);stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:60;stroke-dashoffset:60;animation:drawCheck 0.4s 0.6s ease forwards}
+        @keyframes drawCircle{to{stroke-dashoffset:0}}
+        @keyframes drawCheck{to{stroke-dashoffset:0}}
 
         /* ═══════════ GALLERY PAGE ═══════════ */
         #gallery-page{background:var(--obsidian)}
@@ -723,7 +741,7 @@
             <div class="book-nav"><button class="btn-back" id="backToStep2">← Back</button><button class="btn btn-primary btn-lg" id="submitBooking">Submit Booking Request</button></div>
         </div>
         <div class="book-panel" id="panelSuccess" style="text-align:center;padding:48px 40px">
-            <div style="font-size:3.5rem;margin-bottom:16px;color:var(--champagne)">✦</div>
+            <svg class="success-checkmark" viewBox="0 0 80 80"><circle class="circle" cx="40" cy="40" r="36"/><circle class="circle-anim" cx="40" cy="40" r="36"/><polyline class="check" points="25,40 36,52 55,30"/></svg>
             <h3 style="font-size:1.4rem;font-family:var(--font-heading);margin-bottom:8px">All Set!</h3>
             <p style="color:var(--white-muted);margin-bottom:8px;font-size:1rem">We'll be with you shortly.</p>
             <div id="bookingRefDisplay" style="margin-bottom:20px;padding:14px 24px;background:rgba(207,181,59,0.08);border:1px solid var(--champagne-dim);display:inline-block">
@@ -836,30 +854,34 @@ const MY_SERVICES = [
 ];
 
 /* ═══════════════════════════════════════════════
-   FOOTER FOAM — Thick suds at footer bottom only
+   FOOTER FOAM — Snow-foam suds with cursor reactivity
    ═══════════════════════════════════════════════ */
 (function(){
     var container = document.getElementById('sudsContainer');
     if (!container) return;
-    var BUBBLE_COUNT = 68;
+    var BUBBLE_COUNT = 110;
     var bubbles = [];
     var animating = false;
+    var mouseX = -999, mouseY = -999;
+    var containerRect = null;
 
-    // Create thick foam blanket — full coverage across footer bottom
+    // Create dense snow-foam blanket — full coverage across footer bottom
     for (var i = 0; i < BUBBLE_COUNT; i++) {
         var el = document.createElement('div');
         el.className = 'foam-bubble';
-        // Dense cluster from midpoint down, full width
+        // Dense cluster from midpoint down, full width, some overlap
         var baseX = Math.random() * 100;
-        var baseY = 28 + Math.random() * 72;
-        var size = 10 + Math.random() * 36;
-        var opacity = 0.22 + Math.random() * 0.48;
+        var baseY = 22 + Math.random() * 78;
+        var size = 6 + Math.random() * 50;
+        var opacity = 0.35 + Math.random() * 0.42;
+        // Thicker foam gradient — more opaque white center
+        el.style.background = 'radial-gradient(circle at 30% 22%, rgba(255,255,255,' + (0.92 + Math.random() * 0.08) + ') 0%, rgba(250,252,255,0.65) 20%, rgba(220,228,235,0.2) 55%, rgba(200,210,220,0.04) 100%)';
         el.style.cssText =
             'width:' + size + 'px; height:' + size + 'px;' +
             'left:' + baseX + '%; top:' + baseY + '%;' +
             'opacity:' + opacity + ';' +
-            'animation: foamWobble ' + (3 + Math.random() * 6) + 's ease-in-out infinite;' +
-            'animation-delay:' + (Math.random() * 4) + 's;';
+            'animation: foamWobble ' + (2.5 + Math.random() * 5) + 's ease-in-out infinite;' +
+            'animation-delay:' + (Math.random() * 3) + 's;';
         container.appendChild(el);
         bubbles.push({ el: el, size: size, baseX: baseX, baseY: baseY, currentX: 0, currentY: 0, velocityX: 0, velocityY: 0 });
     }
@@ -870,7 +892,7 @@ const MY_SERVICES = [
         entries.forEach(function(entry){
             if (entry.isIntersecting) {
                 container.classList.add('visible');
-                if (!animating) { animating = true; animate(); }
+                if (!animating) { animating = true; containerRect = container.getBoundingClientRect(); animate(); }
             } else {
                 container.classList.remove('visible');
                 animating = false;
@@ -879,31 +901,70 @@ const MY_SERVICES = [
     }, { threshold: 0.1 });
     observer.observe(footer);
 
+    // Track mouse position relative to suds container
+    document.addEventListener('mousemove', function(e){
+        if (!animating) return;
+        var r = container.getBoundingClientRect();
+        mouseX = e.clientX - r.left;
+        mouseY = e.clientY - r.top;
+    }, {passive:true});
+
+    // Also handle touch on mobile
+    document.addEventListener('touchmove', function(e){
+        if (!animating || !e.touches[0]) return;
+        var r = container.getBoundingClientRect();
+        mouseX = e.touches[0].clientX - r.left;
+        mouseY = e.touches[0].clientY - r.top;
+    }, {passive:true});
+
     function animate() {
         if (!animating) return;
+        var cw = container.offsetWidth, ch = container.offsetHeight;
         bubbles.forEach(function(b){
+            // Spring force back to origin
             b.velocityX += -b.currentX * 0.008;
             b.velocityY += -b.currentY * 0.008;
+
+            // Cursor repulsion — push bubbles away from mouse
+            if (mouseX > 0 && mouseY > 0) {
+                var bx = (b.baseX / 100) * cw + b.currentX;
+                var by = (b.baseY / 100) * ch + b.currentY;
+                var dx = bx - mouseX;
+                var dy = by - mouseY;
+                var dist = Math.sqrt(dx * dx + dy * dy);
+                var radius = 140; // cursor influence radius
+                if (dist < radius && dist > 0) {
+                    var force = (1 - dist / radius) * 1.8;
+                    b.velocityX += (dx / dist) * force;
+                    b.velocityY += (dy / dist) * force;
+                }
+            }
+
+            // Damping
             b.velocityX *= 0.92;
             b.velocityY *= 0.92;
             b.currentX += b.velocityX;
             b.currentY += b.velocityY;
-            b.currentX = Math.max(-8, Math.min(8, b.currentX));
-            b.currentY = Math.max(-6, Math.min(6, b.currentY));
+            // Clamp displacement
+            var maxDisp = b.size * 0.7;
+            b.currentX = Math.max(-maxDisp, Math.min(maxDisp, b.currentX));
+            b.currentY = Math.max(-maxDisp, Math.min(maxDisp, b.currentY));
             b.el.style.transform = 'translate3d(' + b.currentX + 'px,' + b.currentY + 'px,0)';
         });
+        // Slow mouse decay when not moving
+        if (mouseX > -500) { mouseX *= 0.96; mouseY *= 0.96; }
         requestAnimationFrame(animate);
     }
 
-    // Gentle scroll disturbance
+    // Scroll disturbance — foam scatters when scrolling
     var lastScrollY = window.scrollY;
     window.addEventListener('scroll', function(){
         var sv = window.scrollY - lastScrollY;
         lastScrollY = window.scrollY;
-        if (Math.abs(sv) > 5) {
+        if (Math.abs(sv) > 3) {
             bubbles.forEach(function(b){
-                b.velocityX += (Math.random() - 0.5) * Math.abs(sv) * 0.015;
-                b.velocityY -= Math.abs(sv) * 0.01;
+                b.velocityX += (Math.random() - 0.5) * Math.abs(sv) * 0.02;
+                b.velocityY -= Math.abs(sv) * 0.015;
             });
         }
     }, {passive:true});
@@ -1771,8 +1832,8 @@ let activeFilter='all';
 function renderGallery(filter=activeFilter){
     activeFilter=filter||'all';
     const items=filter==='all'?TRANSFORMATIONS:TRANSFORMATIONS.filter(t=>t.category===filter);
-    transformationsGrid.innerHTML=items.map(t=>{var bp=t.beforePos||'center center';var beforeHTML=t.beforeImg?`<img src="${t.beforeImg}" alt="${t.vehicle} before ${t.service.toLowerCase()}" style="width:100%;height:100%;object-fit:cover;object-position:${bp}">`:`<div class="ba-placeholder">${t.beforeEmoji}</div>`;var afterHTML=t.afterImg?`<img src="${t.afterImg}" alt="${t.vehicle} after ${t.service.toLowerCase()}" style="width:100%;height:100%;object-fit:cover;object-position:center center">`:`<div class="ba-placeholder" style="background:linear-gradient(135deg,#0a1a10 0%,#0d2a18 100%);color:var(--champagne)">${t.afterEmoji}</div>`;return`
-        <div>
+    transformationsGrid.innerHTML=items.map((t,i)=>{var bp=t.beforePos||'center center';var beforeHTML=t.beforeImg?`<img src="${t.beforeImg}" alt="${t.vehicle} before ${t.service.toLowerCase()}" style="width:100%;height:100%;object-fit:cover;object-position:${bp}">`:`<div class="ba-placeholder">${t.beforeEmoji}</div>`;var afterHTML=t.afterImg?`<img src="${t.afterImg}" alt="${t.vehicle} after ${t.service.toLowerCase()}" style="width:100%;height:100%;object-fit:cover;object-position:center center">`:`<div class="ba-placeholder" style="background:linear-gradient(135deg,#0a1a10 0%,#0d2a18 100%);color:var(--champagne)">${t.afterEmoji}</div>`;return`
+        <div style="animation-delay:${i*0.1}s">
             <div class="ba-slider" data-ba-id="${t.id}" data-category="${t.category}" tabindex="0" role="slider" aria-label="Before and after: ${t.vehicle} — ${t.service}" aria-valuemin="5" aria-valuemax="95" aria-valuenow="50" style="border-radius:0">
                 ${beforeHTML}
                 <div class="ba-after" style="clip-path:inset(0 0 0 50%)">${afterHTML}</div>
