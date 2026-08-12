@@ -5,7 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="To the Nines Detail — 5-star mobile auto detailing in Wake Forest, NC. We come to you. Hand wash, interior restoration, headlight restoration & more. Instant pricing. Book in 60 seconds. Serving Rolesville, Wakefield & North Raleigh.">
     <meta name="keywords" content="mobile auto detailing Wake Forest NC, car detailing near me, hand car wash Wake Forest, mobile detailer Rolesville, interior car cleaning Wakefield, headlight restoration, exterior car detailing Raleigh, To the Nines Detail">
-    <meta name="robots" content="index, follow">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <meta name="geo.region" content="US-NC">
+    <meta name="geo.placename" content="Wake Forest">
+    <meta name="geo.position" content="35.9799;-78.5097">
+    <meta name="ICBM" content="35.9799, -78.5097">
+    <meta name="theme-color" content="#0B0B0B">
     <link rel="canonical" href="https://www.totheninesdetail.com/">
     <link rel="icon" href="transparent-logo.png">
     <meta property="og:title" content="Luxury Mobile Detailing in Wake Forest, NC | To The Nines Detail">
@@ -78,9 +83,39 @@
       "mainEntity": [
         {"@type": "Question", "name": "What detailing services does To the Nines Detail offer?", "acceptedAnswer": {"@type": "Answer", "text": "We offer Exterior Hand Wash, Interior Detail, Express Detail (both interior and exterior), Premium Detail (our most comprehensive package), and Headlight Restoration. We also offer add-ons like pet hair removal, deep stain removal, and iron removal/clay bar treatment."}},
         {"@type": "Question", "name": "Do you come to my location?", "acceptedAnswer": {"@type": "Answer", "text": "Yes! We are a 100% mobile detailing service. We come to your driveway in Wake Forest, Rolesville, Wakefield, North Raleigh, Youngsville, and surrounding areas. Enter your zip code when booking to confirm we service your area."}},
+        {"@type": "Question", "name": "How much does mobile car detailing cost in Wake Forest?", "acceptedAnswer": {"@type": "Answer", "text": "Our exterior hand wash starts at $100, interior detail starts at $150, express detail (both) starts at $200, and premium detail starts at $299. Headlight restoration starts at $100. Prices vary by vehicle size — use our instant quote tool at totheninesdetail.com for an exact price in seconds."}},
+        {"@type": "Question", "name": "What areas do you serve near Wake Forest, NC?", "acceptedAnswer": {"@type": "Answer", "text": "We serve Wake Forest, Rolesville, Wakefield, North Raleigh, Youngsville, Franklinton, and surrounding areas. Enter your zip code when booking to confirm we service your location. There may be a small travel fee for areas more than 20 minutes from Wake Forest."}},
         {"@type": "Question", "name": "What professional products do you use?", "acceptedAnswer": {"@type": "Answer", "text": "We use only professional-grade chemicals — KochChemie GreenStar and Polstar, Chemical Guys Mr. Pink, P&S Terminator and Carpet Bomber for stain removal, KochChemie Leather Star for leather, Meguiar's Hybrid Ceramic tire shine, and more. No store-bought soap — every product is industry-standard."}},
         {"@type": "Question", "name": "How long does a detail take?", "acceptedAnswer": {"@type": "Answer", "text": "An exterior hand wash takes about 1-1.5 hours. An interior detail takes 2-3 hours depending on condition. Express Detail takes 3-4 hours. Premium Detail takes 4-6 hours. We work efficiently without sacrificing quality — your car will be ready the same day."}},
-        {"@type": "Question", "name": "How do I get a price quote?", "acceptedAnswer": {"@type": "Answer", "text": "Use our instant quote tool at totheninesdetail.com. Select your vehicle make, model, and year, choose your service, and you'll see an accurate price immediately. No phone calls, no waiting — book in under 60 seconds."}}
+        {"@type": "Question", "name": "How do I get a price quote?", "acceptedAnswer": {"@type": "Answer", "text": "Use our instant quote tool at totheninesdetail.com. Select your vehicle make, model, and year, choose your service, and you'll see an accurate price immediately. No phone calls, no waiting — book in under 60 seconds."}},
+        {"@type": "Question", "name": "Do you offer mobile detailing near me?", "acceptedAnswer": {"@type": "Answer", "text": "Yes! We are a 100% mobile service — we bring all equipment, water, and products to your home or workplace in Wake Forest, Rolesville, Wakefield, North Raleigh, and surrounding NC areas. You don't go anywhere; we come to you."}}
+      ]
+    }
+    </script>
+
+    <!-- Structured Data: WebSite -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "To the Nines Detail",
+      "url": "https://www.totheninesdetail.com",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://www.totheninesdetail.com/#book?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+
+    <!-- Structured Data: BreadcrumbList -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.totheninesdetail.com/"},
+        {"@type": "ListItem", "position": 2, "name": "Auto Detailing Wake Forest NC", "item": "https://www.totheninesdetail.com/"}
       ]
     }
     </script>
@@ -90,7 +125,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
     <!-- AOS (Animate on Scroll) -->
+    <link rel="preconnect" href="https://unpkg.com">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="dns-prefetch" href="https://api.web3forms.com">
 
     <style>
         :root {
@@ -507,12 +544,12 @@
         <div class="hero-content">
             <img class="hero-logo" id="heroLogo" src="transparent-logo.png" alt="To the Nines Detail" onerror="this.style.display='none';document.getElementById('heroLogoFallback').style.display='flex'">
             <div id="heroLogoFallback" style="width:140px;height:140px;margin:0 auto 32px;background:var(--racing-green);display:flex;align-items:center;justify-content:center;font-size:3.5rem;color:var(--champagne);border-radius:var(--radius-lg);border:1px solid var(--border-glass);display:none">✦</div>
-            <h1>Showroom Shine,<br><span class="accent">Every Single Time</span></h1>
+            <h1>Showroom Shine,<br><span class="accent">Every Single Time</span><br><small style="font-size:0.38em;color:var(--white-dim);font-weight:400;letter-spacing:0.08em;display:block;margin-top:8px;font-family:var(--font-body);text-transform:uppercase">Wake Forest, NC — Mobile Auto Detailing</small></h1>
             <p class="hero-location">
                 <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-                Serving Wake Forest &amp; surrounding areas
+                Serving Wake Forest, Rolesville, Wakefield &amp; North Raleigh
             </p>
-            <p class="hero-subtitle">Premium mobile detailing that comes to your driveway — no waiting, no drop-off. Hand wash, interior restoration, or the works. See your price in seconds, book in under a minute.</p>
+            <p class="hero-subtitle">Wake Forest's trusted mobile auto detailing — we come to your driveway. Professional hand wash, interior restoration, and headlight restoration with instant online pricing. Book in 60 seconds, no deposit required.</p>
             <div class="hero-actions">
                 <a href="#book" class="btn btn-primary btn-lg">Book Now <span class="btn-arrow">→</span></a>
                 <a href="#gallery" class="btn btn-outline btn-lg">See Transformations</a>
@@ -531,6 +568,11 @@
             <div class="trust-item" data-aos="fade-up" data-aos-delay="300"><span class="trust-check">✦</span> Mobile — We Come To You</div>
         </div>
     </div>
+    <div class="city-strip" style="background:var(--surface-container-lowest);border-top:1px solid var(--border-subtle);border-bottom:1px solid var(--border-subtle);padding:12px 0;text-align:center;overflow:hidden;position:relative;z-index:3">
+        <div style="display:flex;justify-content:center;gap:24px 48px;flex-wrap:wrap;max-width:var(--max-width);margin:0 auto;padding:0 40px;font-size:0.72rem;color:var(--white-dim);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;font-family:var(--font-body)">
+            <span>✦&nbsp;Wake Forest, NC</span><span>✦&nbsp;Rolesville, NC</span><span>✦&nbsp;Wakefield, NC</span><span>✦&nbsp;North Raleigh, NC</span><span>✦&nbsp;Youngsville, NC</span><span>✦&nbsp;Franklinton, NC</span>
+        </div>
+    </div>
 </section>
 
 <!-- ═══════════ GALLERY PAGE ═══════════ -->
@@ -538,7 +580,7 @@
     <div class="gallery-hero" data-aos="fade-up">
         <span class="section-label">✦ Transformations</span>
         <h2>Before &amp; After</h2>
-        <p>Drag the slider to see the difference. Real results on real cars in Wake Forest.</p>
+        <p>Drag the slider to see the difference. Real results on real cars in Wake Forest, Rolesville, and surrounding NC areas.</p>
     </div>
     <div class="gallery-filters" id="galleryFilters">
         <button class="gallery-filter active" data-filter="all">✦ All</button>
@@ -646,7 +688,7 @@
     <div class="book-hero" data-aos="fade-up">
         <span class="section-label">✦ Book Your Detail</span>
         <h2>Get an Instant Quote</h2>
-        <p>Tell us about your car and we'll calculate your price in real time.</p>
+        <p>Mobile detailing in Wake Forest, NC — tell us about your car and we'll calculate your price in real time. No deposit required.</p>
     </div>
     <div class="book-container">
         <div class="book-steps">
