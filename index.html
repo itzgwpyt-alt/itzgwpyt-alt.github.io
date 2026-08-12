@@ -424,7 +424,7 @@
         }
         @media(max-width:768px){
             .nav-inner,.trust-bar-inner,.gallery-hero,.book-hero,.transformations-grid,.book-container,.footer{padding-left:20px;padding-right:20px}
-            .nav-links{position:fixed;top:0;right:0;bottom:0;width:280px;background:var(--racing-green-tint);backdrop-filter:blur(30px);flex-direction:column;padding:calc(var(--nav-height) + 24px) 24px 24px;gap:24px;transform:translateX(100%);transition:0.4s cubic-bezier(0.4,0,0.2,1);border-left:1px solid var(--border-glass);z-index:999}
+            .nav-links{position:fixed;top:0;right:0;bottom:0;width:min(300px,85vw);background:var(--racing-green-tint);backdrop-filter:blur(30px);flex-direction:column;padding:calc(var(--nav-height) + 24px) 24px 24px;gap:24px;transform:translateX(100%);transition:0.4s cubic-bezier(0.4,0,0.2,1);border-left:1px solid var(--border-glass);z-index:999}
             .nav-links.active{transform:translateX(0)}
             .nav-toggle{display:flex}
             .nav-cta{display:none!important}
@@ -484,7 +484,7 @@
             <li role="none"><a href="#book" role="menuitem" data-page="book">Book Now</a></li>
         </ul>
         <a href="#book" class="nav-cta">Book Now</a>
-        <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu" aria-expanded="false" onclick="var l=document.getElementById('navLinks'),t=this,b=document.getElementById('navBackdrop'),o=!l.classList.contains('active');l.classList.toggle('active',o);t.classList.toggle('active',o);b.classList.toggle('active',o);document.body.classList.toggle('no-scroll',o);t.setAttribute('aria-expanded',o?'true':'false');">
+        <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu" aria-expanded="false">
             <span></span><span></span><span></span>
         </button>
     </div>
