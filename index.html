@@ -81,7 +81,7 @@
       "@context": "https://schema.org",
       "@type": "FAQPage",
       "mainEntity": [
-        {"@type": "Question", "name": "What detailing services does To the Nines Detail offer?", "acceptedAnswer": {"@type": "Answer", "text": "We offer Exterior Hand Wash, Interior Detail, Express Detail (both interior and exterior), Premium Detail (our most comprehensive package), and Headlight Restoration. We also offer add-ons like pet hair removal, deep stain removal, and iron removal/clay bar treatment."}},
+        {"@type": "Question", "name": "What detailing services does To the Nines Detail offer?", "acceptedAnswer": {"@type": "Answer", "text": "We offer Exterior Hand Wash, Interior Detail, Express Detail (both interior and exterior), Premium Detail (our most comprehensive package), and Headlight Restoration. We also offer add-ons like pet hair removal, deep stain removal, seat shampoo, carpet shampoo, and iron removal/clay bar treatment."}},
         {"@type": "Question", "name": "Do you come to my location?", "acceptedAnswer": {"@type": "Answer", "text": "Yes! We are a 100% mobile detailing service. We come to your driveway in Wake Forest, Rolesville, Wakefield, North Raleigh, Youngsville, and surrounding areas. Enter your zip code when booking to confirm we service your area."}},
         {"@type": "Question", "name": "How much does mobile car detailing cost in Wake Forest?", "acceptedAnswer": {"@type": "Answer", "text": "Our exterior hand wash starts at $100, interior detail starts at $150, express detail (both) starts at $200, and premium detail starts at $299. Headlight restoration starts at $100. Prices vary by vehicle size — use our instant quote tool at totheninesdetail.com for an exact price in seconds."}},
         {"@type": "Question", "name": "What areas do you serve near Wake Forest, NC?", "acceptedAnswer": {"@type": "Answer", "text": "We serve Wake Forest, Rolesville, Wakefield, North Raleigh, Youngsville, Franklinton, and surrounding areas. Enter your zip code when booking to confirm we service your location. There may be a small travel fee for areas more than 20 minutes from Wake Forest."}},
@@ -413,6 +413,9 @@
         .addon-checkmark{width:20px;height:20px;min-width:20px;border:2px solid var(--border-subtle);border-radius:4px;transition:var(--transition);position:relative;flex-shrink:0}
         .addon-toggle input:checked+.addon-checkmark{background:var(--champagne);border-color:var(--champagne)}
         .addon-toggle input:checked+.addon-checkmark::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--obsidian);font-size:0.7rem;font-weight:700}
+        .addon-toggle input:disabled+.addon-checkmark{opacity:0.6;cursor:not-allowed}
+        .addon-toggle input:disabled~.addon-text,.addon-toggle input:disabled~.addon-hint{opacity:0.85}
+        .addon-toggle:has(input:disabled){cursor:not-allowed}
         .addon-text{font-size:0.85rem;color:var(--white);font-weight:400;line-height:1.3}
         .addon-price{color:var(--champagne);font-weight:700}
         .addon-hint{font-size:0.7rem;color:var(--white-dim);width:100%;padding-left:30px;font-weight:400}
@@ -903,7 +906,7 @@ const MY_SERVICES = [
     { id: 'interior', name: 'Interior Deep Clean', price: 150, icon: '🧹', desc: 'Steam cleaning, stain extraction, leather conditioning, and odor elimination throughout.', featured: false },
     { id: 'headlight', name: 'Headlight Restoration', price: 100, icon: '💡', desc: 'Professional headlight lens restoration. Removes yellowing, haze, and oxidation for crystal-clear visibility and safer night driving.', featured: false },
     { id: 'express', name: 'Express Detail', price: 200, icon: '⚡', desc: 'The best value. Exterior hand wash + interior deep clean in one efficient session. Save $50 vs booking separately.', featured: false },
-    { id: 'premium', name: 'Premium Detail', price: 299, icon: '⭐', desc: 'Our most popular package. Deep interior clean, exterior clay bar, premium wax, and trim restoration.', featured: true },
+    { id: 'premium', name: 'Premium Detail', price: 299, icon: '⭐', desc: 'Our most popular package. Deep interior clean with seat shampoo & stain removal included, plus exterior clay bar, premium wax, and trim restoration.', featured: true },
     // { id: 'ultimate', name: 'Ultimate Detail', price: 699, icon: '💎', desc: 'The showroom reset. Complete interior extraction, exterior decontamination, machine polish, and sealant.', featured: false },
     // { id: 'ceramic', name: 'Ceramic Coating', price: 899, icon: '🛡️', desc: 'Professional-grade ceramic coating. 5+ years of hydrophobic protection.', featured: false },
     // { id: 'correction', name: 'Paint Correction', price: 499, icon: '🔧', desc: 'Multi-stage machine paint correction. Removes swirls, scratches, and oxidation.', featured: false },
@@ -1578,10 +1581,13 @@ document.addEventListener('DOMContentLoaded', function() {
         var adjusted = Math.round(basePrice * svcMult);
         var distFee = window._distanceFee || 0;
         var addonTotal = 0;
+        var _isPrem3 = svc.id === 'premium';
         if (document.getElementById('chkHeadlight') && document.getElementById('chkHeadlight').checked) addonTotal += 100;
         if (document.getElementById('chkPetHair') && document.getElementById('chkPetHair').checked) addonTotal += 40;
-        if (document.getElementById('chkStain') && document.getElementById('chkStain').checked) addonTotal += 35;
+        if (document.getElementById('chkStain') && document.getElementById('chkStain').checked && !_isPrem3) addonTotal += 35;
         if (document.getElementById('chkIronClay') && document.getElementById('chkIronClay').checked) addonTotal += 60;
+        if (document.getElementById('chkSeatShampoo') && document.getElementById('chkSeatShampoo').checked && !_isPrem3) addonTotal += 45;
+        if (document.getElementById('chkCarpetShampoo') && document.getElementById('chkCarpetShampoo').checked) addonTotal += 50;
         var discount = (window._referralDiscount || 0) + (window._stackingDiscount || 0);
         var total = adjusted + distFee + addonTotal - discount;
         if (total < 0) total = 0;
@@ -1974,10 +1980,13 @@ function updatePriceSummary(){
     const svc=SERVICES[selectedService],vi=selectedVehicleData,mult=getServiceMult(svc.id,vi),baseAdj=Math.round(svc.basePrice*mult),vn=selectedMake+' '+selectedModel,vs=vi?vi.size:'midsize';
     var distFee=window._distanceFee||0;
     var addonTotal=0;
+    var _isPrem2 = svc.id === 'premium';
     if(document.getElementById('chkHeadlight')&&document.getElementById('chkHeadlight').checked)addonTotal+=100;
     if(document.getElementById('chkPetHair')&&document.getElementById('chkPetHair').checked)addonTotal+=40;
-    if(document.getElementById('chkStain')&&document.getElementById('chkStain').checked)addonTotal+=35;
+    if(document.getElementById('chkStain')&&document.getElementById('chkStain').checked&&!_isPrem2)addonTotal+=35;
     if(document.getElementById('chkIronClay')&&document.getElementById('chkIronClay').checked)addonTotal+=60;
+    if(document.getElementById('chkSeatShampoo')&&document.getElementById('chkSeatShampoo').checked&&!_isPrem2)addonTotal+=45;
+    if(document.getElementById('chkCarpetShampoo')&&document.getElementById('chkCarpetShampoo').checked)addonTotal+=50;
     var discount=(window._referralDiscount||0)+(window._stackingDiscount||0);
     var total=baseAdj+distFee+addonTotal-discount;
     if(total<0)total=0;
@@ -2412,8 +2421,43 @@ initBooking();
     }
     watchPanel3();
 
+    // Premium Detail includes Seat Shampoo + Deep Stain Removal (auto-checked & locked)
+    function applyPremiumInclusions(){
+        var svcId = '';
+        if (typeof window._selectedServiceIdx === 'number' && MY_SERVICES[window._selectedServiceIdx]) {
+            svcId = MY_SERVICES[window._selectedServiceIdx].id;
+        } else if (typeof selectedService === 'number' && typeof SERVICES !== 'undefined' && SERVICES[selectedService]) {
+            svcId = SERVICES[selectedService].id;
+        }
+        var isPremium = svcId === 'premium';
+
+        function setIncluded(chkEl, addonEl, flagKey, lockedKey, badgeId){
+            if (!chkEl) return;
+            if (isPremium) {
+                if (!window[lockedKey]) { chkEl.checked = true; window[flagKey] = true; }
+                chkEl.disabled = true;
+                window[lockedKey] = true;
+                if (addonEl) addonEl.classList.add('has-addon');
+            } else {
+                chkEl.disabled = false;
+                if (window[lockedKey]) {
+                    chkEl.checked = false;
+                    window[flagKey] = false;
+                    if (addonEl) addonEl.classList.remove('has-addon');
+                }
+                window[lockedKey] = false;
+            }
+            var badge = document.getElementById(badgeId);
+            if (badge) badge.style.display = isPremium ? '' : 'none';
+        }
+
+        setIncluded(chkStain, addonStain, '_stainAddon', '_stainLocked', 'stainIncludedBadge');
+        setIncluded(chkSeat, addonSeat, '_seatShampooAddon', '_seatLocked', 'seatIncludedBadge');
+    }
+
     // Hide addon bar when headlight IS the main service (no point adding it twice)
     function syncAddonVisibility(){
+        applyPremiumInclusions();
         var svcId = '';
         if (typeof selectedService === 'number' && typeof SERVICES !== 'undefined' && SERVICES[selectedService]) {
             svcId = SERVICES[selectedService].id;
@@ -2434,7 +2478,7 @@ initBooking();
             changed = true;
         }
 
-        // Pet Hair & Stain: show only for interior/express/premium
+        // Interior addons: show only for interior/express/premium
         var showInterior = isInterior && !isHeadlightMain;
         if (addonPet) addonPet.style.display = showInterior ? '' : 'none';
         if (!showInterior && chkPet && chkPet.checked) {
@@ -2443,9 +2487,21 @@ initBooking();
             changed = true;
         }
         if (addonStain) addonStain.style.display = showInterior ? '' : 'none';
-        if (!showInterior && chkStain && chkStain.checked) {
+        if (!showInterior && chkStain && chkStain.checked && !chkStain.disabled) {
             chkStain.checked = false;
             window._stainAddon = false;
+            changed = true;
+        }
+        if (addonSeat) addonSeat.style.display = showInterior ? '' : 'none';
+        if (!showInterior && chkSeat && chkSeat.checked && !chkSeat.disabled) {
+            chkSeat.checked = false;
+            window._seatShampooAddon = false;
+            changed = true;
+        }
+        if (addonCarpet) addonCarpet.style.display = showInterior ? '' : 'none';
+        if (!showInterior && chkCarpet && chkCarpet.checked) {
+            chkCarpet.checked = false;
+            window._carpetShampooAddon = false;
             changed = true;
         }
 
@@ -2494,8 +2550,10 @@ initBooking();
 
             if (window._headlightAddon) injectAddonRow('Headlight Restoration', window._headlightPrice || 100, 'hl-addon-row');
             if (window._petHairAddon) injectAddonRow('Pet Hair Removal', window._petHairPrice || 40, 'ph-addon-row');
-            if (window._stainAddon) injectAddonRow('Deep Stain Removal', window._stainPrice || 35, 'st-addon-row');
+            if (window._stainAddon && !window._stainLocked) injectAddonRow('Deep Stain Removal', window._stainPrice || 35, 'st-addon-row');
             if (window._ironClayAddon) injectAddonRow('Iron Removal + Clay Bar', window._ironClayPrice || 60, 'ic-addon-row');
+            if (window._seatShampooAddon && !window._seatLocked) injectAddonRow('Seat Shampoo', window._seatShampooPrice || 45, 'ss-addon-row');
+            if (window._carpetShampooAddon) injectAddonRow('Carpet Shampoo', window._carpetShampooPrice || 50, 'cs-addon-row');
 
             if (window._referralDiscount) injectDiscountRow('Referral Discount', window._referralDiscount);
             if (window._stackingDiscount) injectDiscountRow('Stacking Discount', window._stackingDiscount);
@@ -2673,8 +2731,10 @@ initBooking();
             formData.append('travel_fee', window._distanceFee||0);
             formData.append('headlight_addon', window._headlightAddon?'Yes (+$'+(window._headlightPrice||75)+')':'No');
             formData.append('pet_hair_addon', window._petHairAddon?'Yes (+$'+(window._petHairPrice||40)+')':'No');
-            formData.append('stain_addon', window._stainAddon?'Yes (+$'+(window._stainPrice||35)+')':'No');
+            formData.append('stain_addon', window._stainAddon?(window._stainLocked?'Included in Premium':'Yes (+$'+(window._stainPrice||35)+')'):'No');
             formData.append('iron_clay_addon', window._ironClayAddon?'Yes (+$'+(window._ironClayPrice||60)+')':'No');
+            formData.append('seat_shampoo_addon', window._seatShampooAddon?(window._seatLocked?'Included in Premium':'Yes (+$'+(window._seatShampooPrice||45)+')'):'No');
+            formData.append('carpet_shampoo_addon', window._carpetShampooAddon?'Yes (+$'+(window._carpetShampooPrice||50)+')':'No');
             formData.append('referral_code', window._referralCode || 'None');
             formData.append('referral_discount', window._referralDiscount || 0);
             formData.append('discount_code', window._stackingCode || (document.getElementById('discountCode')?.value||'None'));
@@ -2748,6 +2808,7 @@ initBooking();
             var hasVeh = typeof selectedMake !== 'undefined' && selectedMake && typeof selectedModel !== 'undefined' && selectedModel;
             if (hasSvc && hasVeh) {
                 var svc = MY_SERVICES[window._selectedServiceIdx];
+                applyPremiumInclusions();
                 var sum = document.getElementById('priceSummary');
                 if (!sum) { _origUPS(); return; }
                 var vn = selectedMake + ' ' + selectedModel;
@@ -2802,10 +2863,26 @@ initBooking();
                     running += window._distanceFee || 0;
                     if (tv) tv.textContent = '$' + running;
                 }
+                var isPremiumSvc = svc.id === 'premium';
+                function injectIncluded(label){
+                    var tr = sum.querySelector('.total');
+                    if (!tr) return;
+                    var row = document.createElement('div');
+                    row.className = 'price-summary-row included-row';
+                    row.innerHTML = '<span class="price-label">' + label + '</span><span class="price-value" style="color:var(--champagne);font-size:0.72rem;font-weight:700">Included in Premium</span>';
+                    tr.parentNode.insertBefore(row, tr);
+                }
                 if (window._headlightAddon && svc.id !== 'headlight') injectAddon('Headlight Restoration', window._headlightPrice || 100, 'hl-addon-row addon-row');
                 if (window._petHairAddon) injectAddon('Pet Hair Removal', window._petHairPrice || 40, 'ph-addon-row addon-row');
-                if (window._stainAddon) injectAddon('Deep Stain Removal', window._stainPrice || 35, 'st-addon-row addon-row');
                 if (window._ironClayAddon) injectAddon('Iron Removal + Clay Bar', window._ironClayPrice || 60, 'ic-addon-row addon-row');
+                if (window._carpetShampooAddon) injectAddon('Carpet Shampoo', window._carpetShampooPrice || 50, 'cs-addon-row addon-row');
+                if (isPremiumSvc) {
+                    if (window._seatShampooAddon) injectIncluded('Seat Shampoo');
+                    if (window._stainAddon) injectIncluded('Deep Stain Removal');
+                } else {
+                    if (window._stainAddon) injectAddon('Deep Stain Removal', window._stainPrice || 35, 'st-addon-row addon-row');
+                    if (window._seatShampooAddon) injectAddon('Seat Shampoo', window._seatShampooPrice || 45, 'ss-addon-row addon-row');
+                }
                 if (typeof syncAddonVisibility === 'function') syncAddonVisibility();
                 return;
             }
