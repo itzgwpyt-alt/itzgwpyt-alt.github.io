@@ -66,7 +66,7 @@
       "@context": "https://schema.org",
       "@type": "ItemList",
       "itemListElement": [
-        {"@type": "Service", "position": 1, "name": "Exterior Hand Wash", "description": "Professional hand wash using KochChemie GreenStar pre-wash and Chemical Guys Mr. Pink contact wash. Includes wheel cleaning, wax coating, and tire shine.", "provider": {"@id": "https://totheninesdetail.com/#organization"}, "offers": {"@type": "Offer", "price": "100", "priceCurrency": "USD"}},
+        {"@type": "Service", "position": 1, "name": "Exterior Hand Wash", "description": "Professional hand wash using KochChemie GreenStar pre-wash and Chemical Guys Mr. Pink contact wash. Includes wheel cleaning, tire shine, and a FREE wax coating.", "provider": {"@id": "https://totheninesdetail.com/#organization"}, "offers": {"@type": "Offer", "price": "100", "priceCurrency": "USD"}},
         {"@type": "Service", "position": 2, "name": "Interior Detail", "description": "Deep interior cleaning with steam, KochChemie Polstar APC, P&S stain removal system, and leather conditioning with KochChemie Leather Star.", "provider": {"@id": "https://totheninesdetail.com/#organization"}, "offers": {"@type": "Offer", "price": "150", "priceCurrency": "USD"}},
         {"@type": "Service", "position": 3, "name": "Express Detail", "description": "Exterior hand wash plus interior detail at a discounted package rate. Quick but thorough — save money by bundling both services.", "provider": {"@id": "https://totheninesdetail.com/#organization"}, "offers": {"@type": "Offer", "price": "200", "priceCurrency": "USD"}},
         {"@type": "Service", "position": 4, "name": "Premium Detail", "description": "Our most comprehensive package. Exterior decontamination, hand wash, sealant, plus full interior restoration with seat shampoo and stain removal included.", "provider": {"@id": "https://totheninesdetail.com/#organization"}, "offers": {"@type": "Offer", "price": "299", "priceCurrency": "USD"}},
@@ -775,6 +775,14 @@
                     <span class="addon-hint">Removes bonded contaminants (brake dust, rail dust, industrial fallout) and leaves paint glass-smooth before waxing.</span>
                 </label>
             </div>
+            <div class="addon-bar addon-exterior" id="addonTrim">
+                <label class="addon-toggle">
+                    <input type="checkbox" id="chkTrim">
+                    <span class="addon-checkmark"></span>
+                    <span class="addon-text"><strong>Trim Restoration</strong> <span class="addon-price">+$60</span></span>
+                    <span class="addon-hint">Faded gray plastic restored to deep black with Cerakote ceramic trim coat — lasts for years, not weeks.</span>
+                </label>
+            </div>
             <!-- Discount Code Field -->
             <div style="margin-top:20px" id="discountCodeBlock">
                 <div class="form-group" style="max-width:300px">
@@ -902,11 +910,11 @@ const MY_GALLERY = [
    SERVICES CONFIG — Add/remove service packages
    ═══════════════════════════════════════════════ */
 const MY_SERVICES = [
-    { id: 'handwash', name: 'Exterior Hand Wash', price: 100, icon: '🧽', desc: 'Thorough foam cannon hand wash, wheel cleaning, tire shine, and quick detail spray. Perfect for maintenance between full details.', featured: false },
+    { id: 'handwash', name: 'Exterior Hand Wash', price: 100, icon: '🧽', desc: 'Thorough foam cannon hand wash, wheel cleaning, tire shine, and a FREE wax coating. Perfect for maintenance between full details.', featured: false },
     { id: 'interior', name: 'Interior Deep Clean', price: 150, icon: '🧹', desc: 'Steam cleaning, stain extraction, leather conditioning, and odor elimination throughout.', featured: false },
     { id: 'headlight', name: 'Headlight Restoration', price: 100, icon: '💡', desc: 'Professional headlight lens restoration. Removes yellowing, haze, and oxidation for crystal-clear visibility and safer night driving.', featured: false },
     { id: 'express', name: 'Express Detail', price: 200, icon: '⚡', desc: 'The best value. Exterior hand wash + interior deep clean in one efficient session. Save $50 vs booking separately.', featured: false },
-    { id: 'premium', name: 'Premium Detail', price: 299, icon: '⭐', desc: 'Our most popular package. Deep interior clean with seat shampoo & stain removal included, plus exterior clay bar, premium wax, and trim restoration.', featured: true },
+    { id: 'premium', name: 'Premium Detail', price: 299, icon: '⭐', desc: 'Our most popular package. Deep interior clean with seat shampoo & stain removal included, plus exterior clay bar, premium wax, and trim dressing.', featured: true },
     // { id: 'ultimate', name: 'Ultimate Detail', price: 699, icon: '💎', desc: 'The showroom reset. Complete interior extraction, exterior decontamination, machine polish, and sealant.', featured: false },
     // { id: 'ceramic', name: 'Ceramic Coating', price: 899, icon: '🛡️', desc: 'Professional-grade ceramic coating. 5+ years of hydrophobic protection.', featured: false },
     // { id: 'correction', name: 'Paint Correction', price: 499, icon: '🔧', desc: 'Multi-stage machine paint correction. Removes swirls, scratches, and oxidation.', featured: false },
@@ -1586,6 +1594,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (document.getElementById('chkPetHair') && document.getElementById('chkPetHair').checked) addonTotal += 40;
         if (document.getElementById('chkStain') && document.getElementById('chkStain').checked && !_isPrem3) addonTotal += 35;
         if (document.getElementById('chkIronClay') && document.getElementById('chkIronClay').checked) addonTotal += 60;
+        if (document.getElementById('chkTrim') && document.getElementById('chkTrim').checked) addonTotal += 60;
         if (document.getElementById('chkSeatShampoo') && document.getElementById('chkSeatShampoo').checked && !_isPrem3) addonTotal += 45;
         if (document.getElementById('chkCarpetShampoo') && document.getElementById('chkCarpetShampoo').checked) addonTotal += 50;
         var discount = (window._referralDiscount || 0) + (window._stackingDiscount || 0);
@@ -1816,8 +1825,11 @@ const TRANSFORMATIONS = [
     {id:2,category:'interior',vehicle:'2009 GMC Acadia',service:'Premium Detail',desc:'Interior brought back to life. Stains removed, every surface detailed and protected.',beforeImg:'2009-acadia-before-int.jpeg',afterImg:'2009-acadia-after-int.jpeg'},
     {id:3,category:'exterior',vehicle:'2013 Toyota Tacoma',service:'Express Detail',desc:'Quick but thorough exterior refresh. Decontaminated, clean, and shining.',beforeImg:'2013-tacoma-before-ext.jpeg',afterImg:'2013-tacoma-after-ext.jpeg'},
     {id:4,category:'interior',vehicle:'2013 Toyota Tacoma',service:'Express Detail',desc:'Work-truck interior deep cleaned. Every surface detailed and protected.',beforeImg:'2013-tacoma-before-int.jpeg',afterImg:'2013-tacoma-after-int.jpeg'},
-    {id:5,category:'exterior',vehicle:'2021 Honda Pilot',service:'Exterior Hand Wash',desc:'Family SUV brought back to showroom condition. Deep clean, decontamination, and sealant for lasting protection.',beforeImg:'2021-pilot-before-ext.png',afterImg:'2021-pilot-after-ext.jpeg'},
+    {id:5,category:'exterior',vehicle:'2021 Honda Pilot',service:'Exterior Hand Wash',desc:'Family SUV brought back to showroom condition. Deep clean, decontamination, and sealant for lasting protection.',beforeImg:'2021-pilot-before-ext.jpeg',afterImg:'2021-pilot-after-ext.jpeg'},
     {id:6,category:'headlight',vehicle:'2008 Honda CR-V',service:'Headlight Restoration',desc:'Yellowed, hazed lenses restored to crystal-clear. Like-new visibility and safety.',beforeImg:'headlight-before.jpeg',afterImg:'headlight-after.jpeg',beforePos:'50% 30%'},
+    {id:7,category:'interior',vehicle:'2020 Toyota Tacoma',service:'Interior Detail',desc:'Work-truck interior deep cleaned. Stains lifted and every surface detailed and protected.',beforeImg:'2020-tacoma-before-int.jpeg',afterImg:'2020-tacoma-after-int.jpeg'},
+    {id:8,category:'exterior',vehicle:'2023 Honda Pilot',service:'Premium Detail',desc:'Family SUV brought back to showroom condition. Deep clean, decontamination, and sealant for lasting protection.',beforeImg:'2023-pilot-before-ext.jpeg',afterImg:'2023-pilot-after-ext.jpeg'},
+    {id:9,category:'interior',vehicle:'2023 Honda Pilot',service:'Premium Detail',desc:'Interior refreshed for daily family duty. Stains removed and every surface detailed and protected.',beforeImg:'2023-pilot-before-int.jpeg',afterImg:'2023-pilot-after-int.jpeg'},
 ];
 
 /* ═══════════════════════════════════════════════
@@ -1871,12 +1883,13 @@ function resetBookingState(){
     });
     selectedMake='';selectedModel='';selectedVehicleData=null;
     var tt=document.getElementById('trustTabWrap');if(tt)tt.style.display='none';
-    ['chkHeadlight','chkPetHair','chkStain','chkIronClay','chkSeatShampoo','chkCarpetShampoo'].forEach(function(id){
+    ['chkHeadlight','chkPetHair','chkStain','chkIronClay','chkSeatShampoo','chkCarpetShampoo','chkTrim'].forEach(function(id){
         var el=document.getElementById(id);if(el){el.checked=false;el.disabled=false;}
     });
     window._headlightAddon=false;window._petHairAddon=false;
     window._stainAddon=false;window._ironClayAddon=false;
     window._seatShampooAddon=false;window._carpetShampooAddon=false;
+    window._trimAddon=false;
     window._stainLocked=false;window._seatLocked=false;
     var dc=document.getElementById('discountCode');if(dc)dc.value='';
     window._activeDiscount=0;
@@ -1985,6 +1998,7 @@ function updatePriceSummary(){
     if(document.getElementById('chkPetHair')&&document.getElementById('chkPetHair').checked)addonTotal+=40;
     if(document.getElementById('chkStain')&&document.getElementById('chkStain').checked&&!_isPrem2)addonTotal+=35;
     if(document.getElementById('chkIronClay')&&document.getElementById('chkIronClay').checked)addonTotal+=60;
+    if(document.getElementById('chkTrim')&&document.getElementById('chkTrim').checked)addonTotal+=60;
     if(document.getElementById('chkSeatShampoo')&&document.getElementById('chkSeatShampoo').checked&&!_isPrem2)addonTotal+=45;
     if(document.getElementById('chkCarpetShampoo')&&document.getElementById('chkCarpetShampoo').checked)addonTotal+=50;
     var discount=(window._referralDiscount||0)+(window._stackingDiscount||0);
@@ -2087,47 +2101,48 @@ initBooking();
    ═══════════════════════════════════════════════ */
 (function(){
     // ── ZIP DISTANCES — Wake Forest, NC service area ──
+    // Travel fee tiers (drive time from Wake Forest):
+    //   ≤ 20 min = FREE   |   ~30 min = $10   |   ~1 hr = $25
     var ZIP_DISTANCES = {
-        // Wake Forest proper — no travel fee
+        // Wake Forest & immediate area — FREE (within ~20 min)
         '27587': { area: 'Wake Forest, NC', fee: 0 },
         '27588': { area: 'Wake Forest, NC', fee: 0 },
-        // Adjacent towns — small fee
-        '27571': { area: 'Rolesville, NC', fee: 5 },
-        '27596': { area: 'Youngsville, NC', fee: 5 },
-        '27525': { area: 'Franklinton, NC', fee: 10 },
-        // North Raleigh / Wakefield
-        '27614': { area: 'North Raleigh / Wakefield, NC', fee: 10 },
-        '27615': { area: 'North Raleigh, NC', fee: 10 },
-        '27616': { area: 'Northeast Raleigh, NC', fee: 10 },
-        '27604': { area: 'Northeast Raleigh, NC', fee: 10 },
-        '27609': { area: 'North Raleigh, NC', fee: 10 },
-        // Raleigh proper — moderate fee
-        '27601': { area: 'Downtown Raleigh, NC', fee: 15 },
-        '27603': { area: 'Raleigh, NC', fee: 15 },
-        '27605': { area: 'Raleigh, NC', fee: 15 },
-        '27606': { area: 'Raleigh, NC', fee: 15 },
-        '27607': { area: 'Raleigh, NC', fee: 15 },
-        '27608': { area: 'Raleigh, NC', fee: 15 },
-        '27610': { area: 'Raleigh, NC', fee: 15 },
-        '27612': { area: 'Raleigh, NC', fee: 15 },
-        '27613': { area: 'Raleigh, NC', fee: 15 },
-        '27617': { area: 'NW Raleigh / Brier Creek, NC', fee: 20 },
-        // Surrounding towns
-        '27545': { area: 'Knightdale, NC', fee: 15 },
-        '27591': { area: 'Wendell, NC', fee: 15 },
-        '27597': { area: 'Zebulon, NC', fee: 15 },
-        '27522': { area: 'Creedmoor, NC', fee: 15 },
-        '27526': { area: 'Fuquay-Varina, NC', fee: 20 },
-        '27502': { area: 'Apex, NC', fee: 20 },
-        '27511': { area: 'Cary, NC', fee: 20 },
-        '27513': { area: 'Cary, NC', fee: 20 },
-        '27518': { area: 'Cary, NC', fee: 20 },
-        '27519': { area: 'Cary, NC', fee: 20 },
-        '27560': { area: 'Morrisville, NC', fee: 20 },
-        '27523': { area: 'Apex, NC', fee: 20 },
-        '27539': { area: 'Apex, NC', fee: 20 },
-        '27540': { area: 'Holly Springs, NC', fee: 20 },
-        '27529': { area: 'Garner, NC', fee: 20 },
+        '27571': { area: 'Rolesville, NC', fee: 0 },
+        '27596': { area: 'Youngsville, NC', fee: 0 },
+        '27525': { area: 'Franklinton, NC', fee: 0 },
+        // North Raleigh / Wakefield — FREE (close by)
+        '27614': { area: 'North Raleigh / Wakefield, NC', fee: 0 },
+        '27615': { area: 'North Raleigh, NC', fee: 0 },
+        '27616': { area: 'Northeast Raleigh, NC', fee: 0 },
+        '27604': { area: 'Northeast Raleigh, NC', fee: 0 },
+        '27609': { area: 'North Raleigh, NC', fee: 0 },
+        '27613': { area: 'North Raleigh, NC', fee: 0 },
+        // Raleigh proper & near towns — ~30 min = $10
+        '27601': { area: 'Downtown Raleigh, NC', fee: 10 },
+        '27603': { area: 'Raleigh, NC', fee: 10 },
+        '27605': { area: 'Raleigh, NC', fee: 10 },
+        '27606': { area: 'Raleigh, NC', fee: 10 },
+        '27607': { area: 'Raleigh, NC', fee: 10 },
+        '27608': { area: 'Raleigh, NC', fee: 10 },
+        '27610': { area: 'Raleigh, NC', fee: 10 },
+        '27612': { area: 'Raleigh, NC', fee: 10 },
+        '27617': { area: 'NW Raleigh / Brier Creek, NC', fee: 10 },
+        '27545': { area: 'Knightdale, NC', fee: 10 },
+        '27591': { area: 'Wendell, NC', fee: 10 },
+        '27597': { area: 'Zebulon, NC', fee: 10 },
+        '27522': { area: 'Creedmoor, NC', fee: 10 },
+        // Longer drives — ~1 hr = $25
+        '27526': { area: 'Fuquay-Varina, NC', fee: 25 },
+        '27502': { area: 'Apex, NC', fee: 25 },
+        '27511': { area: 'Cary, NC', fee: 25 },
+        '27513': { area: 'Cary, NC', fee: 25 },
+        '27518': { area: 'Cary, NC', fee: 25 },
+        '27519': { area: 'Cary, NC', fee: 25 },
+        '27560': { area: 'Morrisville, NC', fee: 25 },
+        '27523': { area: 'Apex, NC', fee: 25 },
+        '27539': { area: 'Apex, NC', fee: 25 },
+        '27540': { area: 'Holly Springs, NC', fee: 25 },
+        '27529': { area: 'Garner, NC', fee: 25 },
         '27562': { area: 'New Hill, NC', fee: 25 },
         '27703': { area: 'Durham, NC', fee: 25 },
         '27713': { area: 'Durham, NC', fee: 25 }
@@ -2307,6 +2322,8 @@ initBooking();
     window._seatShampooPrice = 45;
     window._carpetShampooAddon = false;
     window._carpetShampooPrice = 50;
+    window._trimAddon = false;
+    window._trimPrice = 60;
     window._stainLocked = false;
     window._seatLocked = false;
     var chk = document.getElementById('chkHeadlight');
@@ -2315,12 +2332,14 @@ initBooking();
     var chkIron = document.getElementById('chkIronClay');
     var chkSeat = document.getElementById('chkSeatShampoo');
     var chkCarpet = document.getElementById('chkCarpetShampoo');
+    var chkTrim = document.getElementById('chkTrim');
     var addonBar = document.getElementById('addonHeadlight');
     var addonPet = document.getElementById('addonPetHair');
     var addonStain = document.getElementById('addonStain');
     var addonIron = document.getElementById('addonIronClay');
     var addonSeat = document.getElementById('addonSeatShampoo');
     var addonCarpet = document.getElementById('addonCarpetShampoo');
+    var addonTrim = document.getElementById('addonTrim');
 
     // Calculate headlight price based on vehicle size + age
     function getHeadlightPrice(){
@@ -2378,6 +2397,13 @@ initBooking();
         chkCarpet.addEventListener('change', function(){
             window._carpetShampooAddon = chkCarpet.checked;
             if (addonCarpet) addonCarpet.classList.toggle('has-addon', chkCarpet.checked);
+            if (typeof updatePriceSummary === 'function') updatePriceSummary();
+        });
+    }
+    if (chkTrim) {
+        chkTrim.addEventListener('change', function(){
+            window._trimAddon = chkTrim.checked;
+            if (addonTrim) addonTrim.classList.toggle('has-addon', chkTrim.checked);
             if (typeof updatePriceSummary === 'function') updatePriceSummary();
         });
     }
@@ -2505,12 +2531,18 @@ initBooking();
             changed = true;
         }
 
-        // Iron/Clay: show only for exterior/express/premium
+        // Exterior addons: show only for exterior/express/premium
         var showExterior = isExterior && !isHeadlightMain;
         if (addonIron) addonIron.style.display = showExterior ? '' : 'none';
         if (!showExterior && chkIron && chkIron.checked) {
             chkIron.checked = false;
             window._ironClayAddon = false;
+            changed = true;
+        }
+        if (addonTrim) addonTrim.style.display = showExterior ? '' : 'none';
+        if (!showExterior && chkTrim && chkTrim.checked) {
+            chkTrim.checked = false;
+            window._trimAddon = false;
             changed = true;
         }
 
@@ -2552,6 +2584,7 @@ initBooking();
             if (window._petHairAddon) injectAddonRow('Pet Hair Removal', window._petHairPrice || 40, 'ph-addon-row');
             if (window._stainAddon && !window._stainLocked) injectAddonRow('Deep Stain Removal', window._stainPrice || 35, 'st-addon-row');
             if (window._ironClayAddon) injectAddonRow('Iron Removal + Clay Bar', window._ironClayPrice || 60, 'ic-addon-row');
+            if (window._trimAddon) injectAddonRow('Trim Restoration', window._trimPrice || 60, 'tr-addon-row');
             if (window._seatShampooAddon && !window._seatLocked) injectAddonRow('Seat Shampoo', window._seatShampooPrice || 45, 'ss-addon-row');
             if (window._carpetShampooAddon) injectAddonRow('Carpet Shampoo', window._carpetShampooPrice || 50, 'cs-addon-row');
 
@@ -2733,6 +2766,7 @@ initBooking();
             formData.append('pet_hair_addon', window._petHairAddon?'Yes (+$'+(window._petHairPrice||40)+')':'No');
             formData.append('stain_addon', window._stainAddon?(window._stainLocked?'Included in Premium':'Yes (+$'+(window._stainPrice||35)+')'):'No');
             formData.append('iron_clay_addon', window._ironClayAddon?'Yes (+$'+(window._ironClayPrice||60)+')':'No');
+            formData.append('trim_restoration_addon', window._trimAddon?'Yes (+$'+(window._trimPrice||60)+')':'No');
             formData.append('seat_shampoo_addon', window._seatShampooAddon?(window._seatLocked?'Included in Premium':'Yes (+$'+(window._seatShampooPrice||45)+')'):'No');
             formData.append('carpet_shampoo_addon', window._carpetShampooAddon?'Yes (+$'+(window._carpetShampooPrice||50)+')':'No');
             formData.append('referral_code', window._referralCode || 'None');
@@ -2875,6 +2909,7 @@ initBooking();
                 if (window._headlightAddon && svc.id !== 'headlight') injectAddon('Headlight Restoration', window._headlightPrice || 100, 'hl-addon-row addon-row');
                 if (window._petHairAddon) injectAddon('Pet Hair Removal', window._petHairPrice || 40, 'ph-addon-row addon-row');
                 if (window._ironClayAddon) injectAddon('Iron Removal + Clay Bar', window._ironClayPrice || 60, 'ic-addon-row addon-row');
+                if (window._trimAddon) injectAddon('Trim Restoration', window._trimPrice || 60, 'tr-addon-row addon-row');
                 if (window._carpetShampooAddon) injectAddon('Carpet Shampoo', window._carpetShampooPrice || 50, 'cs-addon-row addon-row');
                 if (isPremiumSvc) {
                     if (window._seatShampooAddon) injectIncluded('Seat Shampoo');
